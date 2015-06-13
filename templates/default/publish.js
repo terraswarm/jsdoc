@@ -340,6 +340,7 @@ function buildNav(members) {
     var seen = {};
     var seenTutorials = {};
 
+    nav += buildMemberNav(members.accessors, 'Accessors', {}, linkto);
     nav += buildMemberNav(members.modules, 'Modules', {}, linkto);
     nav += buildMemberNav(members.externals, 'Externals', seen, linktoExternal);
     nav += buildMemberNav(members.classes, 'Classes', seen, linkto);
