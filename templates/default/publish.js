@@ -300,6 +300,7 @@ function buildMemberNav(items, itemHeading, itemsSeen, linktoFn) {
                 itemsNav += '<li>' + linktoFn('', item.name) + '</li>';
             }
             else if ( !hasOwnProp.call(itemsSeen, item.longname) ) {
+                itemsNav += '<li> item.longname: ' + item.longname + ' item.name.replace: ' + item.name.replace + '</li>';
                 itemsNav += '<li>' + linktoFn(item.longname, item.name.replace(/^module:/, '')) + '</li>';
                 itemsSeen[item.longname] = true;
             }
@@ -560,6 +561,7 @@ exports.publish = function(taffyData, opts, tutorials) {
 
     // once for all
     view.nav = buildNav(members);
+    attachModuleSymbols( find({ longname: {left: 'accessor:'} }), members.accessors );
     attachModuleSymbols( find({ longname: {left: 'module:'} }), members.modules );
 
     // generate the pretty-printed source files first so other pages can link to them
@@ -580,6 +582,7 @@ exports.publish = function(taffyData, opts, tutorials) {
     indexUrl);
 
     // set up the lists that we'll use to generate pages
+    var accessors = taffy(members.accessors);
     var classes = taffy(members.classes);
     var modules = taffy(members.modules);
     var namespaces = taffy(members.namespaces);
@@ -588,6 +591,12 @@ exports.publish = function(taffyData, opts, tutorials) {
     var interfaces = taffy(members.interfaces);
 
     Object.keys(helper.longnameToUrl).forEach(function(longname) {
+        var myAccessors = helper.find(accessors, {longname: longname});
+        if (myAccessors.length) {
+            // FIXME: I don't understand the helper.longnameToUrl[longname] stuff, so just hardwire it.
+            generate('Accessor: ' + myAccessors[0].name, myAccessors, "accessor-" + myAccessors[0].name + ".html");
+        }
+
         var myModules = helper.find(modules, {longname: longname});
         if (myModules.length) {
             generate('Module: ' + myModules[0].name, myModules, helper.longnameToUrl[longname]);
