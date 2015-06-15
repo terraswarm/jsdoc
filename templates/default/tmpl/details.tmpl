@@ -141,3 +141,18 @@ if (data.defaultvalue && (data.defaultvaluetype === 'object' || data.defaultvalu
     </dd>
     <?js } ?>
 </dl>
+
+<?js if (data.inputs && data.inputs.length) { ?>
+    <h5>Inputs:</h5>
+    <?js= this.partial('params.tmpl', data.inputs) ?>
+                                              <?js } ?>
+
+<?js if (data.outputs && data.outputs.length) { ?>
+    <h5>Outputs:</h5>
+    <?js= this.partial('params.tmpl', data.outputs) ?>
+                                              <?js } ?>
+
+<?js if (data.parameters && data.parameters.length) { ?>
+    <h5>Parameters:</h5>
+    <?js= this.partial('params.tmpl', data.parameters) ?>
+<?js } ?>
