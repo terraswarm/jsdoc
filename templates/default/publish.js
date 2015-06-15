@@ -592,8 +592,7 @@ exports.publish = function(taffyData, opts, tutorials) {
     Object.keys(helper.longnameToUrl).forEach(function(longname) {
         var myAccessors = helper.find(accessors, {longname: longname});
         if (myAccessors.length) {
-            // FIXME: I don't understand the helper.longnameToUrl[longname] stuff, so just hardwire it.
-            generate('Accessor: ' + myAccessors[0].name, myAccessors, "accessor-" + myAccessors[0].name + ".html");
+            generate('Accessor: ' + myAccessors[0].name, myAccessors, helper.longnameToUrl[longname]);
         }
 
         var myModules = helper.find(modules, {longname: longname});
