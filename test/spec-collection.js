@@ -3,7 +3,7 @@
 var fs = require('jsdoc/fs');
 var path = require('jsdoc/path');
 var runtime = require('jsdoc/util/runtime');
-var wrench = require('wrench');
+var klaw = require('klaw');
 
 var specs = [];
 var finalSpecs = [];
@@ -43,7 +43,7 @@ function addSpec(file, target) {
 function isValidSpec(file, matcher) {
     var result;
 
-    var skipPath = runtime.isRhino() ? runtime.NODE : runtime.RHINO;
+    var skipPath = runtime.NODE;
 
     // valid specs must...
     try {
@@ -52,9 +52,9 @@ function isValidSpec(file, matcher) {
             // ...match the matcher
             matcher.test( path.basename(file) ) &&
             // ...be relevant to the current runtime
-            file.indexOf(skipPath) === -1;
+            file.indexOf('/' + skipPath + '/') === -1;
     }
-    catch(e) {
+    catch (e) {
         result = false;
     }
 
@@ -75,18 +75,25 @@ function shouldLoad(file, matcher) {
     return result;
 }
 
-exports.load = function(loadpath, matcher, clear) {
+exports.load = function(loadpath, matcher, clear, callback) {
     if (clear === true) {
         clearSpecs();
     }
 
-    var wannaBeSpecs = wrench.readdirSyncRecursive(loadpath);
-    for (var i = 0; i < wannaBeSpecs.length; i++) {
-        var file = path.join(loadpath, wannaBeSpecs[i]);
-        if ( shouldLoad(file, matcher) ) {
-            addSpec(file);
-        }
-    }
+    var wannaBeSpecs = [];
+    klaw(loadpath)
+      .on('data', function(spec) {
+        wannaBeSpecs.push(spec.path);
+      })
+      .on('end', function() {
+          for (var i = 0; i < wannaBeSpecs.length; i++) {
+              var file = wannaBeSpecs[i];
+              if ( shouldLoad(file, matcher) ) {
+                  addSpec(file);
+              }
+          }
+          callback();
+      });
 };
 
 exports.getSpecs = function() {

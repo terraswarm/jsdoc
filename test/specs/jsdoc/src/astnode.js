@@ -14,6 +14,7 @@ describe('jsdoc/src/astNode', function() {
 
     // create the AST nodes we'll be testing
     var arrayExpression = parse('[,]').body[0].expression;
+    var arrowFunctionExpression = parse('var foo = () => {};').body[0].declarations[0].init;
     var assignmentExpression = parse('foo = 1;').body[0].expression;
     var binaryExpression = parse('foo & foo;').body[0].expression;
     var functionDeclaration1 = parse('function foo() {}').body[0];
@@ -28,6 +29,7 @@ describe('jsdoc/src/astNode', function() {
     var memberExpression = parse('foo.bar;').body[0].expression;
     var memberExpressionComputed1 = parse('foo["bar"];').body[0].expression;
     var memberExpressionComputed2 = parse('foo[\'bar\'];').body[0].expression;
+    var methodDefinition = parse('class Foo { bar() {} }').body[0].body.body[0];
     var propertyGet = parse('var foo = { get bar() {} };').body[0].declarations[0].init
         .properties[0];
     var propertyInit = parse('var foo = { bar: {} };').body[0].declarations[0].init.properties[0];
@@ -40,6 +42,7 @@ describe('jsdoc/src/astNode', function() {
     var variableDeclaration2 = parse('var foo = 1, bar = 2;').body[0];
     var variableDeclarator1 = parse('var foo = 1;').body[0].declarations[0];
     var variableDeclarator2 = parse('var foo;').body[0].declarations[0];
+    var experimentalObjectRestSpread = parse('var one = {...two, three: 4};').body[0].declarations[0].init;
 
     it('should exist', function() {
         expect(typeof astNode).toBe('object');
@@ -63,6 +66,10 @@ describe('jsdoc/src/astNode', function() {
 
     it('should export an isAssignment method', function() {
         expect(typeof astNode.isAssignment).toBe('function');
+    });
+
+    it('should export an isFunction method', function() {
+        expect(typeof astNode.isFunction).toBe('function');
     });
 
     it('should export an isScope method', function() {
@@ -489,6 +496,28 @@ describe('jsdoc/src/astNode', function() {
         });
     });
 
+    describe('isFunction', function() {
+        it('should recognize function declarations as functions', function() {
+            expect( astNode.isFunction(functionDeclaration1) ).toBe(true);
+        });
+
+        it('should recognize function expressions as functions', function() {
+            expect( astNode.isFunction(functionExpression1) ).toBe(true);
+        });
+
+        it('should recognize method definitions as functions', function() {
+            expect( astNode.isFunction(methodDefinition) ).toBe(true);
+        });
+
+        it('should recognize arrow function expressions as functions', function() {
+            expect( astNode.isFunction(arrowFunctionExpression) ).toBe(true);
+        });
+
+        it('should recognize non-functions', function() {
+            expect( astNode.isFunction(arrayExpression) ).toBe(false);
+        });
+    });
+
     describe('isScope', function() {
         it('should return false for undefined values', function() {
             expect( astNode.isScope() ).toBe(false);
@@ -586,6 +615,10 @@ describe('jsdoc/src/astNode', function() {
 
         it('should return an empty string for all other nodes', function() {
             expect( astNode.nodeToValue(binaryExpression) ).toBe('');
+        });
+
+        it('should understand and ignore ExperimentalSpreadProperty', function() {
+            expect( astNode.nodeToValue(experimentalObjectRestSpread) ).toBe('{"three":4}');
         });
     });
 });
