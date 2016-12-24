@@ -1,5 +1,5 @@
 {
-  "name": "jsdoc",
+  "name": "@terraswarm/jsdoc",
   "version": "3.5.0-dev",
   "revision": "1472684384198",
   "description": "An API documentation generator for JavaScript.",
@@ -49,11 +49,15 @@
   },
   "contributors": [
     {
+       "email": "cxh@eecs.berkeley.edu",
+       "name": "Christopher Brooks"
+    },
+    {
       "url": "https://github.com/jsdoc3/jsdoc/graphs/contributors"
     }
   ],
   "maintainers": {
-    "name": "Jeff Williams",
-    "email": "jeffrey.l.williams@gmail.com"
+       "email": "cxh@eecs.berkeley.edu",
+       "name": "Christopher Brooks"
   }
 }

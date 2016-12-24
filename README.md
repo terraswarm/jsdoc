@@ -1,3 +1,27 @@
+JSDoc 3 with Accessor Extensions
+================================
+
+This is a fork of JSDoc 3 that supports the @accessor tag
+
+See https://www.terraswarm.org/accessors/wiki/Main/JSDoc
+
+The sources are at https://www.terraswarm.org/accessors/wiki/Main/JSDoc
+
+How to publish
+--------------
+1.  Update the patch number in package.json
+2.  Login to npm
+        npm login
+
+        Username: terraswarm
+        Password: See ~terra/.npmpass on terra
+        Email: terraswarm-software@terraswarm.org 
+3.  Publish:
+        npm publish --access public
+
+
+Below is the original README.md from JSDoc3.
+
 JSDoc 3
 =======
 [![Build Status](https://travis-ci.org/jsdoc3/jsdoc.svg?branch=master)](http://travis-ci.org/jsdoc3/jsdoc)
