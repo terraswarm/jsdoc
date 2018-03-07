@@ -1,6 +1,6 @@
 {
   "name": "@terraswarm/jsdoc",
-  "version": "3.5.0-dev",
+  "version": "3.5.1-dev",
   "revision": "1472684384198",
   "description": "An API documentation generator for JavaScript.",
   "keywords": [
